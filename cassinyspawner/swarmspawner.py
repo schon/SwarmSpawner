@@ -310,7 +310,7 @@ class SwarmSpawner(Spawner):
             container_spec['env'] = self.get_env()
 
             if hasattr(self, 'resource_spec'):
-                resource_spec = self.resource_spec
+                resource_spec = dict(**self.resource_spec)
             resource_spec.update(user_options.get('resource_spec', {}))
 
             if hasattr(self, 'networks'):

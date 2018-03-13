@@ -10,7 +10,7 @@ from pprint import pformat
 
 import docker
 from docker.errors import APIError
-from docker.utils import kwargs_from_env
+from docker.utils import parse_bytes, kwargs_from_env
 from tornado import gen
 
 from jupyterhub.spawner import Spawner
@@ -312,6 +312,11 @@ class SwarmSpawner(Spawner):
             if hasattr(self, 'resource_spec'):
                 resource_spec = dict(**self.resource_spec)
             resource_spec.update(user_options.get('resource_spec', {}))
+            # enable to set a human readable memory unit
+            if 'mem_limit' in resource_spec:
+                resource_spec['mem_limit'] = parse_bytes(resource_spec['mem_limit'])
+            if 'mem_reservation' in resource_spec:
+                resource_spec['mem_reservation'] = parse_bytes(resource_spec['mem_reservation'])
 
             if hasattr(self, 'networks'):
                 networks = self.networks
